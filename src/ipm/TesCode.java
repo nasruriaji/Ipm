@@ -199,10 +199,10 @@ public class TesCode {
         
         for (int i = 0; i < neuron_hidden; i++) {
             for (int j = 0; j < neuron_input; j++) {
-                str.bobotV[i][j] = v[i][j];
+//                str.bobotV[i][j] = v[i][j];
                 // System.out.println("Bobot V = "+str.bobotV[i][j]);
             }
-            str.bobotVb[i] = vb[i];
+//            str.bobotVb[i] = vb[i];
             // System.out.println("Bobot Vb = "+str.bobotVb[i]);
         }
         
@@ -210,10 +210,10 @@ public class TesCode {
         
         for (int i = 0; i < neuron_output; i++) {
             for (int j = 0; j < neuron_hidden; j++) {
-                str.bobotW[i][j] = w[i][j];
+ //               str.bobotW[i][j] = w[i][j];
                 // System.out.println("Bobot W = "+str.bobotW[i][j]);
             }
-            str.bobotWb[i] = wb[i];
+//            str.bobotWb[i] = wb[i];
             // System.out.println("Bobot Wb = "+str.bobotWb[i]);
         }
     }

@@ -68,8 +68,8 @@ public class Prediction extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,7 +104,7 @@ public class Prediction extends javax.swing.JFrame {
                         .addGap(9, 9, 9)))
                 .addGap(117, 117, 117)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(235, Short.MAX_VALUE))
+                .addContainerGap(125, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,13 +147,15 @@ public class Prediction extends javax.swing.JFrame {
         x[0][2] = Double.parseDouble(jTextField3.getText());
         x[0][3] = Double.parseDouble(jTextField4.getText());
         x[0][4] = Double.parseDouble(jTextField5.getText());
-        double v[][] = {{0.2,0.3,-0.1},{0.3,0.1,-0.1},{0.3,0.1,-0.1},{0.3,0.1,-0.1},{0.3,0.1,-0.1}};
-        double vb[] = {-0.3,0.3,0.3};
-        double w[][] = {{0.5,-0.3,-0.4}};
-        double wb[] = {-0.1};
-        int neuron_hidden = 3;
+        
+        double v[][] = {{0.2,0.3,-0.1},{0.3,0.1,-0.1},{0.2,0.3,-0.1},{0.2,0.3,-0.1},{0.2,0.3,-0.1}}; // str.bobotV;
+        double vb[] = {-0.3,0.3,0.3}; // str.bobotVb;
+        double w[][] = {{0.5,-0.3,-0.4}}; // str.bobotW;
+        double wb[] = {-0.1}; // str.bobotWb;
+        int neuron_hidden = 3; //str.hidden_layer;
         int neuron_output = 1;
         int neuron_input = 5;
+        double hasil;
         
         for (int i = 0; i < 1; i++) {
             
@@ -162,7 +164,9 @@ public class Prediction extends javax.swing.JFrame {
                 double z_net[] = new double[10];
                 double temp = 0;
                 for (int k = 0; k < neuron_input; k++) {
+                    // System.out.println(v[i][j]);
                     temp = temp + (x[i][k] * v[k][j]);
+                    // System.out.println(x[i][k]+" "+v[k][j]);
                 }
                 z_net[j] = vb[j] + temp;
                 z[j] = 1/(1+(Math.exp(-z_net[j])));
@@ -178,7 +182,11 @@ public class Prediction extends javax.swing.JFrame {
                 }
                 y_net[j] = wb[j] + temp;
                 y[j] = 1/(1+(Math.exp(-y_net[j])));
-                jLabel6.setText(String.valueOf(y[j]));
+                
+                // double hasil = (((y[j])*(str.nilai_max-str.nilai_min)))+(0.8*str.nilai_min);
+                hasil = (((y[j])*(77-69)))+(0.8*69);
+                
+                jLabel6.setText(String.valueOf(hasil));
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -14,13 +14,15 @@ import java.sql.Statement;
  * @author David
  */
 public class Storage {
-    public double dataLatih[][] = new double[50][50];
-    public double dataUji[][] = new double[50][50];
-    public double bobotW[][] = new double[100][100];
-    public double bobotWb[] = new double[100];
-    public double bobotV[][] = new double[100][100];
-    public double bobotVb[] = new double[100];
-    public double target[] = new double[50];
+//    
+//    public double bobotW[][] = new double[100][100];
+//    public double bobotWb[] = new double[100];
+//    public double bobotV[][] = new double[100][100];
+//    public double bobotVb[] = new double[100];
+//    public int hidden_layer;
+//    public double nilai_max;
+//    public double nilai_min;
+//    
     
     public double nilaiMax(double[][] arr, int n) {
         double max = 0;

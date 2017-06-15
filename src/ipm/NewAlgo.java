@@ -18,17 +18,20 @@ public class NewAlgo {
         double wb[] = {-0.1};
         double t[] = {0};
         double lr = 0.2;
-        double mse[] = new double[10];
         int neuron_hidden = 3;
         int neuron_output = 1;
         int neuron_input = 2;
         int loop = 0;
-        int epoch = 100;
+        int epoch = 5;
         double target_error = 0.08;
         double last_mse = 0;
         
         do {
+            double temp_mse[] = new double[50];
+            double mse = 0;
+            
             for (int i = 0; i < 1; i++) {
+                double temp_y = 0;
 
                 // Hitung hidden layer
                 double z[] = new double[10];
@@ -87,11 +90,11 @@ public class NewAlgo {
                     // System.out.println("y = "+y[j]);
                     
                     // MSE
-                    mse[j] = (Math.pow((t[i] - y[j]), 2));
-                    last_mse = mse[j];
-                    System.out.println("MSE "+t[i]+" - "+y[j]+" = "+mse[j]);
+                    temp_mse[i] = Math.pow((y[j]-t[i]), 2)/1;
                 }
 
+                mse = mse + temp_mse[i];
+                
                 // Hitung error y dan delta w
                 double error_y[] = new double[10];
                 double Aw[][] = new double[10][10];
@@ -166,6 +169,9 @@ public class NewAlgo {
                 }
             // Akhir for i
             }
+        System.out.println(mse);
+        last_mse = mse;
+        
         loop++;
         } while (loop < epoch && target_error < last_mse);
         System.out.println("Last MSE = "+last_mse);
