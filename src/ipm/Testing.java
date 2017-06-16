@@ -104,9 +104,89 @@ public class Testing extends javax.swing.JFrame {
         tbDataPrediksi.getDataVector().removeAllElements();
         tbDataPrediksi.fireTableDataChanged();
         
-        double x[] = {70,71,73};
-        double y[] = {1,2,3};
-        int i = 0;
+        double xNorm[][] = new double[50][50];
+        double x[][] = new double[50][50];
+        double t[] = new double[50];
+        double prediksi[] = new double[50];
+        
+        int n = 0;
+        try {
+            Statement stm = Koneksi.getConn().createStatement();
+            ResultSet rsl = stm.executeQuery("select * from data_ipm");
+            
+            while (rsl.next()) {
+                xNorm[n][0] = rsl.getDouble("t5");
+                xNorm[n][1] = rsl.getDouble("t4");
+                xNorm[n][2] = rsl.getDouble("t3");
+                xNorm[n][3] = rsl.getDouble("t2");
+                xNorm[n][4] = rsl.getDouble("t1");
+                xNorm[n][5] = rsl.getDouble("t");
+                n++;
+            }
+        
+            rsl.close();
+            stm.close();
+        } catch (SQLException e) {
+            System.out.println("Gagal"+e);
+        }
+        
+        Storage str = new Storage();
+        int countRecords = str.countRecords();
+        double setting[] = str.readSetting();
+        
+        double nilai_max = setting[2];
+        double nilai_min = setting[1];
+        double neuron_hidden = setting[0];
+        int neuron_output = 1;
+        int neuron_input = 5;
+        double selisih[] = new double[50];
+        
+        for (int i = 0; i < countRecords; i++) {
+            for (int j = 0; j < 6; j++) {
+                x[i][j] = ((0.8*(xNorm[i][j]-nilai_min))/(nilai_max-nilai_min))+0.1;
+                t[i] = xNorm[i][5];
+            }
+        }
+        
+        double v[][] = str.readBobotHidden(neuron_hidden, neuron_input);
+        double vb[] = str.readBiasHidden();
+        double w[][] = str.readBobotOutput(neuron_output, neuron_hidden);
+        double wb[] = str.readBiasOutput();
+        
+        for (int i = 0; i < countRecords; i++) {
+            double hasil = 0;
+            
+            double z[] = new double[10];
+            for (int j = 0; j < neuron_hidden; j++) {
+                double z_net[] = new double[10];
+                double temp = 0;
+                for (int k = 0; k < neuron_input; k++) {
+                    // System.out.println(v[i][j]);
+                    temp = temp + (x[i][k] * v[k][j]);
+                    // System.out.println(x[i][k]+" "+v[k][j]);
+                }
+                z_net[j] = vb[j] + temp;
+                z[j] = 1/(1+(Math.exp(-z_net[j])));
+            }
+            
+            double y[] = new double[10];
+            for (int j = 0; j < neuron_output; j++) {
+                double y_net[] = new double[10];
+                double temp = 0;
+
+                for (int k = 0; k < neuron_hidden; k++) {
+                    temp = temp + (z[k] * w[j][k]);
+                }
+                y_net[j] = wb[j] + temp;
+                y[j] = 1/(1+(Math.exp(-y_net[j])));
+                
+                hasil = (((y[j])*(nilai_max-nilai_min)))+(0.8*nilai_min);
+                
+            }
+            prediksi[i] = hasil;
+            selisih[i] = Math.abs(hasil - t[i]);
+            // System.out.println(hasil+" - "+t[i]+" = "+selisih[i]);
+        }
         
         try {
             Statement stm = Koneksi.getConn().createStatement();
@@ -117,13 +197,12 @@ public class Testing extends javax.swing.JFrame {
                 
                 obj[0] = rsl.getString("tahun_data_ipm");
                 obj[1] = rsl.getString("t");
-                obj[2] = x[i];
-                obj[3] = y[i];
+//                obj[2] = prediksi[count];
+//                obj[3] = selisih[count];
                 
                 tbDataPrediksi.addRow(obj);
             }
             
-            i++;
             rsl.close();
             stm.close();
         } catch (SQLException e) {

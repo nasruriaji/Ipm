@@ -300,29 +300,34 @@ public class Learning extends javax.swing.JFrame {
                     for (int k = 0; k < neuron_hidden; k++) {
                         // update z
                         w[j][k] = w[j][k] + Aw[j][k];
-                        // System.out.println(Aw[j][k]+" = "+w[j][k]);
+                        System.out.println("Bobot output = "+Aw[j][k]+" = "+w[j][k]);
+                        str.writeBobotOutput(w, neuron_output, neuron_hidden);
                     }
                     // update bias
                     wb[j] = wb[j] + Awb[j];
-                    // System.out.println(Awb[j]+" = "+wb[j]);
+                    System.out.println("Bias Output = "+Awb[j]+" = "+wb[j]);
+                    str.writeBiasOutput(wb, neuron_output);
                 }
-
+                
+                System.out.println();
+                
                 // update bobot hidden
                 for (int j = 0; j < neuron_hidden; j++) {
                     for (int k = 0; k < neuron_input; k++) {
                         // update z
                         v[k][j] = v[k][j] + Av[k][j];
-                        // System.out.println(Av[k][j]+" = "+v[k][j]);
-                        // v[k][j] = str.bobotV[k][j];
+                        System.out.println("Bobot Hidden = "+Av[k][j]+" = "+v[k][j]);
+                        str.writeBobotHidden(v, neuron_hidden, neuron_input);
                     }
                     // update bias
                     vb[j] = vb[j] + Avb[j];
-                    // System.out.println(Avb[j]+" = "+vb[j]); 
+                    System.out.println("Bias Hidden = "+Avb[j]+" = "+vb[j]); 
+                    str.writeBiasHidden(vb, neuron_hidden);
                 }
             // Akhir for i
             }
         
-        System.out.println("MSE "+loop+" = "+mse);
+        // System.out.println("MSE "+loop+" = "+mse);
         last_mse = mse;
         
         loop++;
@@ -333,7 +338,15 @@ public class Learning extends javax.swing.JFrame {
         
         jTextArea1.setText("MSE = "+last_mse+"\n Epoch ke"+loop);
         
-        System.out.println();
+        double nilai_min = str.nilaiMin(xNorm, countRecords);
+        double nilai_max = str.nilaiMax(xNorm, countRecords);
+        
+        double data[] = new double[3];
+        data[0] = neuron_hidden;
+        data[1] = nilai_min;
+        data[2] = nilai_max;
+        
+        str.writeSetting(data);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -343,6 +356,8 @@ public class Learning extends javax.swing.JFrame {
         int id = 0;
         double nilai_min = str.nilaiMin(x, countRecords);
         double nilai_max = str.nilaiMax(x, countRecords);
+        
+        
         
         try {
             Statement stm;

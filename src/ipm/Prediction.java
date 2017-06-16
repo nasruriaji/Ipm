@@ -141,21 +141,36 @@ public class Prediction extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        double x[][] = new double[10][10];
-        x[0][0] = Double.parseDouble(jTextField1.getText());
-        x[0][1] = Double.parseDouble(jTextField2.getText());
-        x[0][2] = Double.parseDouble(jTextField3.getText());
-        x[0][3] = Double.parseDouble(jTextField4.getText());
-        x[0][4] = Double.parseDouble(jTextField5.getText());
+        double xNorm[][] = new double[10][10];
+        xNorm[0][0] = Double.parseDouble(jTextField1.getText());
+        xNorm[0][1] = Double.parseDouble(jTextField2.getText());
+        xNorm[0][2] = Double.parseDouble(jTextField3.getText());
+        xNorm[0][3] = Double.parseDouble(jTextField4.getText());
+        xNorm[0][4] = Double.parseDouble(jTextField5.getText());
         
-        double v[][] = {{0.2,0.3,-0.1},{0.3,0.1,-0.1},{0.2,0.3,-0.1},{0.2,0.3,-0.1},{0.2,0.3,-0.1}}; // str.bobotV;
-        double vb[] = {-0.3,0.3,0.3}; // str.bobotVb;
-        double w[][] = {{0.5,-0.3,-0.4}}; // str.bobotW;
-        double wb[] = {-0.1}; // str.bobotWb;
-        int neuron_hidden = 3; //str.hidden_layer;
+        Storage str = new Storage();
+
+        double setting[] = str.readSetting();
+        
+        double nilai_max = setting[2];
+        double nilai_min = setting[1];
+        double neuron_hidden = setting[0];
         int neuron_output = 1;
         int neuron_input = 5;
         double hasil;
+        
+        double x[][] = new double[10][10];
+        
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < 5; j++) {
+                x[i][j] = ((0.8*(xNorm[i][j]-nilai_min))/(nilai_max-nilai_min))+0.1;
+            }
+        }
+        
+        double v[][] = str.readBobotHidden(neuron_hidden, neuron_input);
+        double vb[] = str.readBiasHidden();
+        double w[][] = str.readBobotOutput(neuron_output, neuron_hidden);
+        double wb[] = str.readBiasOutput();
         
         for (int i = 0; i < 1; i++) {
             
@@ -184,7 +199,8 @@ public class Prediction extends javax.swing.JFrame {
                 y[j] = 1/(1+(Math.exp(-y_net[j])));
                 
                 // double hasil = (((y[j])*(str.nilai_max-str.nilai_min)))+(0.8*str.nilai_min);
-                hasil = (((y[j])*(77-69)))+(0.8*69);
+                // hasil = (((y[j])*(77-69)))+(0.8*69);
+                hasil = (((y[j])*(nilai_max-nilai_min)))+(0.8*nilai_min);
                 
                 jLabel6.setText(String.valueOf(hasil));
             }
